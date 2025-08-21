@@ -15,15 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Test page for the wizard modal.
  *
- * @package tool_calllearning
  * @copyright 2025 Laurent David <laurent@call-learning.fr>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require_once(__DIR__ . '/../../../../../config.php');
 
-$plugin->version = 2025081300; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires = 2024100700.00; // Requires Moodle 4.5 or later.
-$plugin->component = 'tool_calllearning';
+//defined('BEHAT_SITE_RUNNING') || die();
+
+
+global $CFG, $PAGE, $OUTPUT;
+$PAGE->set_url('/admin/tool/calllearning/tests/fixtures/modal_wizard.php');
+$PAGE->add_body_class('limitedwidth');
+require_login();
+$PAGE->set_context(core\context\system::instance());
+$PAGE->set_title('Wizard modal test page');
+/* @var \core_renderer $OUTPUT */
+echo $OUTPUT->header();
+echo $OUTPUT->heading('Wizard modal test page');
+$wizardwg = new \tool_calllearning\output\wizard_action_button('wizardwg', 'Wizard modal test page');
+echo $OUTPUT->render($wizardwg);
+echo $OUTPUT->footer();

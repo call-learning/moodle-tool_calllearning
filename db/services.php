@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,15 +16,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Web services
  *
  * @package tool_calllearning
  * @copyright 2025 Laurent David <laurent@call-learning.fr>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version = 2025081300; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires = 2024100700.00; // Requires Moodle 4.5 or later.
-$plugin->component = 'tool_calllearning';
+$functions = [
+    'tool_calllearning_wizard_action' => [
+        'classname' => \tool_calllearning\external\wizard_action::class,
+        'methodname' => 'execute',
+        'description' => 'Execute an action and returns the next step of the wizard.',
+        'type' => 'write',
+        'ajax' => true,
+        'loginrequired' => true,
+    ],
+];

@@ -14,16 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace tool_calllearning\output;
+
+use core\output\renderer_base;
+
 /**
- * Version details.
+ * Class renderer
  *
- * @package tool_calllearning
+ * @package tool_calllearning\output
  * @copyright 2025 Laurent David <laurent@call-learning.fr>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version = 2025081300; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires = 2024100700.00; // Requires Moodle 4.5 or later.
-$plugin->component = 'tool_calllearning';
+class renderer extends renderer_base {
+}

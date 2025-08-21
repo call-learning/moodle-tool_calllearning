@@ -15,15 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Language strings for the Call Learning tool.
  *
- * @package tool_calllearning
  * @copyright 2025 Laurent David <laurent@call-learning.fr>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version = 2025081300; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires = 2024100700.00; // Requires Moodle 4.5 or later.
-$plugin->component = 'tool_calllearning';
+$string['pluginname'] = 'Call Learning Tool';
+$string['openmodal'] = 'Open Wizard';
