@@ -26,8 +26,60 @@
 namespace tool_calllearning\external;
 
 use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_single_structure;
+use core_external\external_value;
 
 class wizard_action extends external_api {
+    /**
+     * Checks the parameters and executes the action.
+     *
+     * @param string $currentstepuid The UID of the current step.
+     * @param string $wizarduid The UID of the wizard.
+     * @param string $action The action to execute, either 'next' or 'previous'.
+     * @return array An array containing the next step UID, modal type, and modal content
+     * @throws \restricted_context_exception
+     */
+    public static function execute(
+        string $currentstepuid,
+        string $wizarduid,
+        string $action,
+    ): array {
+
+        [
+            'currentstepuid' => $currentstepuid,
+            'wizarduid' => $wizarduid,
+            'action' => $action,
+        ] = self::validate_parameters(self::execute_parameters(), [
+            'currentstepuid' => $currentstepuid,
+            'wizarduid' => $wizarduid,
+            'action' => $action,
+        ]);
+
+        $wizard = \tool_calllearning\local\wizard\wizard_manager::from_wizard_id($wizarduid);
+        switch ($action) {
+            case 'next':
+                $nextstep = $wizard->get_next_step($currentstepuid);
+                if ($nextstep === null) {
+                    throw new \moodle_exception('No next step found for the current step.');
+                }
+                break;
+            case 'previous':
+                $nextstep = $wizard->get_previous_step($currentstepuid);
+                if ($nextstep === null) {
+                    throw new \moodle_exception('No previous step found for the current step.');
+                }
+                break;
+            default:
+                throw new \moodle_exception('Invalid action specified.');
+        }
+        return [
+            'nextstep' => $nextstep->get_uid(),
+            'modaltype' => $nextstep->get_modal_type(),
+            'modalcontentclass' => $nextstep->get_modal_content_class(),
+        ];
+    }
+
     /**
      * Returns description of method parameters
      *
@@ -35,38 +87,22 @@ class wizard_action extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-            'cmid' => new external_value(PARAM_INT, 'course module id', VALUE_REQUIRED),
-            'groupid' => new external_value(PARAM_INT, 'bigbluebuttonbn group id', VALUE_DEFAULT, 0),
+            'currentstepuid' => new external_value(PARAM_ALPHAEXT, 'The UID of the current step'),
+            'wizarduid' => new external_value(PARAM_ALPHAEXT, 'The UID of the wizard'),
+            'action' => new external_value(PARAM_ALPHAEXT, 'The action to execute'),
         ]);
-    }
-
-    /**
-     * Checks the
-     *
-     * @param null|int $groupid
-     * @return array (empty array for now)
-     * @throws \restricted_context_exception
-     */
-    public static function execute(
-        int $currentstep,
-        string $action,
-    ): array {
-
-
-        return $result;
     }
 
     /**
      * Describe the return structure of the external service.
      *
      * @return external_single_structure
-     * @since Moodle 3.3
      */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
-            'nextstep' => new external_value(PARAM_INT, 'The next step of the wizard'),
+            'nextstep' => new external_value(PARAM_ALPHANUMEXT, 'The next step of the wizard'),
             'modaltype' => new external_value(PARAM_ALPHA, 'The type of modal to display'),
-            'modalcontentclass' => new external_value(PARAM_ALPHAEXT, 'The full class of the modal content'),
+            'modalcontentclass' => new external_value(PARAM_RAW, 'The full class of the modal content'),
         ]);
     }
 }

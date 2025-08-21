@@ -32,8 +32,8 @@
 {{< core/modal }}
     {{$footer}}
         <button type="button" class="btn btn-secondary" data-action="cancel">{{#str}} cancel {{/str}}</button>
+        {{#showsave}}<button type="button" class="btn btn-primary" data-action="save">{{#str}} savechanges {{/str}}</button>{{/showsave}}
         <button type="button" class="btn btn-secondary" data-action="previous">{{#str}} previous {{/str}}</button>
         <button type="button" class="btn btn-secondary" data-action="next">{{#str}} next {{/str}}</button>
-        <button type="button" class="btn btn-primary" data-action="save">{{#str}} savechanges {{/str}}</button>
     {{/footer}}
 {{/ core/modal }}

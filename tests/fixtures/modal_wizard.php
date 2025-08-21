@@ -35,6 +35,9 @@ $PAGE->set_title('Wizard modal test page');
 /* @var \core_renderer $OUTPUT */
 echo $OUTPUT->header();
 echo $OUTPUT->heading('Wizard modal test page');
-$wizardwg = new \tool_calllearning\output\wizard_action_button('wizardwg', 'Wizard modal test page');
+$wizardwg = new \tool_calllearning\output\wizard_action_button(
+    'Hello there !',
+    '<p>Wizard modal test <strong>Super</strong>page</p>>'
+);
 echo $OUTPUT->render($wizardwg);
 echo $OUTPUT->footer();

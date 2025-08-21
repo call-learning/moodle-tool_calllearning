@@ -32,7 +32,7 @@ class wizard_action_button implements \renderable, \templatable {
      */
     public function __construct(
         protected string $title = '',
-        protected string $description = '',
+        protected string $content = '',
         protected array $steps = [],
         protected int $currentstep = 0,
         protected ?string $nextbuttontext = null,
@@ -45,7 +45,6 @@ class wizard_action_button implements \renderable, \templatable {
     public function export_for_template(renderer_base $output): object {
         $data = new \stdClass();
         $data->title = $this->title;
-        $data->description = $this->description;
         $data->steps = [];
         foreach ($this->steps as $index => $step) {
             $data->steps[] = (object)[
@@ -60,7 +59,7 @@ class wizard_action_button implements \renderable, \templatable {
         $data->previousbuttontext = $this->previousbuttontext ?? get_string('previous');
         $data->finishbuttontext = $this->finishbuttontext ?? get_string('save');
         $data->cancelbuttontext = $this->cancelbuttontext ?? get_string('cancel');
-        $data->body = '';
+        $data->body = $this->content;
         return $data;
     }
 }

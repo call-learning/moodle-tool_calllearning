@@ -35,17 +35,20 @@
        {{actionbuttontitle}}
     </button>
 </div>
+<div class="modal-wizard" aria-hidden="true">
+</div>
 {{#js}}
     require(['tool_calllearning/modal_wizard'], (ModalWizard) => {
         const actionButton = document.querySelector('#wb-{{uniqid}}');
         actionButton.addEventListener('click', (event) => {
             event.preventDefault();
-            const modal = new ModalWizard({
-                element: document.querySelector('.modal-wizard'),
+            const modal = ModalWizard.create({
                 title: '{{title}}',
                 body: '{{body}}',
+            }).then((modal) => {;
+                modal.show();
             });
-            modal.show();
+
         });
     });
 {{/js}}
