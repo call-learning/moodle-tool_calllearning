@@ -19,16 +19,38 @@ namespace tool_calllearning\local\wizard;
 /**
  * A class representing the steps of the wizard.
  *
- * @package tool_calllearning\output
+ * @package tool_calllearning
  * @copyright 2025 Laurent David <laurent@call-learning.fr>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class wizard_info {
     public function __construct(
-        protected array $wizardsteps,
+        protected array $wizardsteps = [],
     ) {
         // Initialize the wizard steps array.
         $this->wizardsteps = array_values($this->wizardsteps); // Make sure the array is indexed from 0.
+    }
+
+    /**
+     * From JSON format to wizard info.
+     */
+    public static function from_json(string $json): self {
+        $data = json_decode($json, true);
+        $wizardsteps = [];
+        foreach ($data['wizardsteps'] as $stepdata) {
+            $wizardsteps[] = new wizard_step(
+                $stepdata['uid'],
+                $stepdata['title'],
+                $stepdata['description'],
+                $stepdata['icon'],
+                $stepdata['action'],
+                $stepdata['nextstepuid'] ?? null,
+                $stepdata['previousstepuid'] ?? null,
+                $stepdata['template'] ?? null,
+                $stepdata['formclass'] ?? null
+            );
+        }
+        return new self($wizardsteps);
     }
 
     /**
@@ -93,6 +115,7 @@ class wizard_info {
         $currenstepindex = $this->get_step_index($currentstepuid);
         return $this->wizardsteps[$currenstepindex - 1] ?? null;
     }
+
     /**
      * Convert the wizard info to JSON format.
      *
@@ -100,33 +123,9 @@ class wizard_info {
      */
     public function to_json(): string {
         $data = [
-            'wizardsteps' => array_map(function($step) {
-                return $step->to_array();
-            }, $this->wizardsteps)
+            'wizardsteps' => $this->wizardsteps,
         ];
         return json_encode($data);
-    }
-
-    /**
-     * From JSON format to wizard info.
-     */
-    public static function from_json(string $json): self {
-        $data = json_decode($json, true);
-        $wizardsteps = [];
-        foreach ($data['wizardsteps'] as $stepdata) {
-            $wizardsteps[] = new wizard_step(
-                $stepdata['uid'],
-                $stepdata['title'],
-                $stepdata['description'],
-                $stepdata['icon'],
-                $stepdata['action'],
-                $stepdata['nextstepuid'] ?? null,
-                $stepdata['previousstepuid'] ?? null,
-                $stepdata['template'] ?? null,
-                $stepdata['formclass'] ?? null
-            );
-        }
-        return new self($wizardsteps);
     }
 
     /**

@@ -31,9 +31,9 @@ class wizard_action_button implements \renderable, \templatable {
      * Constructor for the wizard class.
      */
     public function __construct(
+        protected string $wizarduid,
         protected string $title = '',
         protected string $content = '',
-        protected array $steps = [],
         protected int $currentstep = 0,
         protected ?string $nextbuttontext = null,
         protected ?string $previousbuttontext = null,
@@ -45,21 +45,13 @@ class wizard_action_button implements \renderable, \templatable {
     public function export_for_template(renderer_base $output): object {
         $data = new \stdClass();
         $data->title = $this->title;
-        $data->steps = [];
-        foreach ($this->steps as $index => $step) {
-            $data->steps[] = (object)[
-                'title' => $step['title'],
-                'content' => $step['content'],
-                'is_current' => ($index === $this->currentstep),
-                'is_completed' => ($index < $this->currentstep),
-            ];
-        }
         $data->currentstep = $this->currentstep;
         $data->nextbuttontext = $this->nextbuttontext ?? get_string('next');
         $data->previousbuttontext = $this->previousbuttontext ?? get_string('previous');
         $data->finishbuttontext = $this->finishbuttontext ?? get_string('save');
         $data->cancelbuttontext = $this->cancelbuttontext ?? get_string('cancel');
         $data->body = $this->content;
+        $data->wizarduid = $this->wizarduid;
         return $data;
     }
 }

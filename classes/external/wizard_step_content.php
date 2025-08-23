@@ -30,20 +30,18 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-class wizard_action extends external_api {
+class wizard_step_content extends external_api {
     /**
      * Checks the parameters and executes the action.
      *
      * @param string $currentstepuid The UID of the current step.
      * @param string $wizarduid The UID of the wizard.
-     * @param string $action The action to execute, either 'next' or 'previous'.
      * @return array An array containing the next step UID, modal type, and modal content
      * @throws \restricted_context_exception
      */
     public static function execute(
         string $wizarduid,
-        string $currentstepuid,
-        string $action,
+        ?string $currentstepuid = '',
     ): array {
 
         [
@@ -57,18 +55,12 @@ class wizard_action extends external_api {
         ]);
 
         $wizard = \tool_calllearning\local\wizard\wizard_manager::from_wizard_id($wizarduid);
-        switch ($action) {
-            case 'next':
-                $followingstep = $wizard->action_next_step($currentstepuid);
-                break;
-            case 'previous':
-                $followingstep = $wizard->action_previous_step($currentstepuid);
-                break;
-            default:
-                throw new \moodle_exception('Invalid action specified.');
-        }
+        $currentstep = $wizard->get_current_step();
+
         return [
-            'nextstepuid' => $followingstep->get_uid() ?? $currentstepuid,
+            'nextstep' => $nextstep->get_uid(),
+            'modaltype' => $nextstep->get_modal_type(),
+            'modalcontentclass' => $nextstep->get_modal_content_class(),
         ];
     }
 
@@ -80,7 +72,7 @@ class wizard_action extends external_api {
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
             'wizarduid' => new external_value(PARAM_ALPHAEXT, 'The UID of the wizard'),
-            'currentstepuid' => new external_value(PARAM_ALPHAEXT, 'The UID of the current step'),
+            'currentstepuid' => new external_value(PARAM_ALPHAEXT, 'The UID of the current step, if empty we get the first step', VALUE_DEFAULT, ''),
             'action' => new external_value(PARAM_ALPHAEXT, 'The action to execute'),
         ]);
     }
@@ -92,7 +84,10 @@ class wizard_action extends external_api {
      */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
-            'nextstepuid' => new external_value(PARAM_ALPHANUMEXT, 'The next step of the wizard'),
+            'stepid' => new external_value(PARAM_ALPHANUMEXT, 'The next step of the wizard'),
+            'type' => new external_value(PARAM_ALPHA, 'The type of modal to display'),
+            'content' => new external_value(PARAM_RAW, 'The content of the modal'),
+            'title' => new external_value(PARAM_TEXT, 'The title of the modal'),
         ]);
     }
 }

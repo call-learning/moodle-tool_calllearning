@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,29 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace tool_calllearning\local\wizard;
+
 /**
- * Web services
+ * A class representing a single step for the wizard.
  *
  * @package tool_calllearning
  * @copyright 2025 Laurent David <laurent@call-learning.fr>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-$functions = [
-    'tool_calllearning_wizard_action' => [
-        'classname' => \tool_calllearning\external\wizard_action::class,
-        'methodname' => 'execute',
-        'description' => 'Action the next step for the provided step and the action (for example go to the next step if we can).',
-        'type' => 'write',
-        'ajax' => true,
-        'loginrequired' => true,
-    ],
-    'tool_calllearning_wizard_step_content' => [
-        'classname' => \tool_calllearning\external\wizard_step_content::class,
-        'methodname' => 'execute',
-        'description' => 'Get the content to display for the provided step.',
-        'type' => 'write',
-        'ajax' => true,
-        'loginrequired' => true,
-    ],
-];
+class wizard_step_form extends wizard_step {
+    /**
+     * Get the type of the step.
+     *
+     * @return string The type of the step.
+     */
+    public function get_type(): string {
+        return 'form';
+    }
+}
